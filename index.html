@@ -21,28 +21,6 @@
             </div>
         </header>
 
-        <!-- Navigation -->
-        <nav class="sidebar">
-            <div class="nav-header">
-                <h3 data-i18n="menu">Menu</h3>
-            </div>
-            <ul class="nav-list">
-                <li><a href="#" class="nav-link active" data-page="1" data-i18n="cover">Capa</a></li>
-                <li><a href="#" class="nav-link" data-page="2" data-i18n="index">Índice</a></li>
-                <li class="nav-section">
-                    <span class="section-title" data-i18n="recipes">Receitas</span>
-                    <ul class="sub-nav">
-                        <li><a href="#" class="nav-link" data-page="3" data-country="portugal">🇵🇹 Portugal</a></li>
-                        <li><a href="#" class="nav-link" data-page="5" data-country="stp">🇸🇹 São Tomé e Príncipe</a></li>
-                        <li><a href="#" class="nav-link" data-page="7" data-country="cv">🇨🇻 Cabo Verde</a></li>
-                        <li><a href="#" class="nav-link" data-page="9" data-country="angola">🇦🇴 Angola</a></li>
-                        <li><a href="#" class="nav-link" data-page="11" data-country="senegal">🇸🇳 Senegal</a></li>
-                        <li><a href="#" class="nav-link" data-page="13" data-country="uk">🇬🇧 Reino Unido</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-viewer">
@@ -66,6 +44,31 @@
                 <button id="fitScreen" class="btn btn-small" data-i18n="fit">Ajustar</button>
             </div>
         </main>
+
+        <!-- Navigation Menu (Bottom) -->
+        <nav class="bottom-menu">
+            <div class="menu-header">
+                <h3 data-i18n="menu">Menu</h3>
+            </div>
+            <ul class="menu-list">
+                <li><a href="#" class="menu-link active" data-page="1" data-i18n="cover">Capa</a></li>
+                <li><a href="#" class="menu-link" data-page="2" data-i18n="index">Índice</a></li>
+                <li class="menu-section">
+                    <span class="section-title" data-i18n="recipes">Receitas</span>
+                    <ul class="sub-menu">
+                        <li><a href="#" class="menu-link" data-page="3">🇵🇹 Portugal</a></li>
+                        <li><a href="#" class="menu-link" data-page="5">🇸🇹 São Tomé e Príncipe</a></li>
+                        <li><a href="#" class="menu-link" data-page="7">🇨🇻 Cabo Verde</a></li>
+                        <li><a href="#" class="menu-link" data-page="9">🇦🇴 Angola</a></li>
+                        <li><a href="#" class="menu-link" data-page="11">🇸🇳 Senegal</a></li>
+                        <li><a href="#" class="menu-link" data-page="13">🇬🇧 Reino Unido</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="menu-footer">
+                <p>Projeto - PADDE 2025/2026</p>
+            </div>
+        </nav>
     </div>
 
     <!-- Internationalization -->
@@ -148,12 +151,12 @@
         document.getElementById('nextBtn').addEventListener('click', () => goToPage(currentPage + 1));
 
         // Navigation links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.menu-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = parseInt(link.dataset.page);
                 goToPage(page);
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
             });
         });
