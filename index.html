@@ -21,6 +21,28 @@
             </div>
         </header>
 
+        <!-- Navigation -->
+        <nav class="sidebar">
+            <div class="nav-header">
+                <h3 data-i18n="menu">Menu</h3>
+            </div>
+            <ul class="nav-list">
+                <li><a href="#" class="nav-link active" data-page="1" data-i18n="cover">Capa</a></li>
+                <li><a href="#" class="nav-link" data-page="2" data-i18n="index">Índice</a></li>
+                <li class="nav-section">
+                    <span class="section-title" data-i18n="recipes">Receitas</span>
+                    <ul class="sub-nav">
+                        <li><a href="#" class="nav-link" data-page="3" data-country="portugal">🇵🇹 Portugal</a></li>
+                        <li><a href="#" class="nav-link" data-page="5" data-country="stp">🇸🇹 São Tomé e Príncipe</a></li>
+                        <li><a href="#" class="nav-link" data-page="7" data-country="cv">🇨🇻 Cabo Verde</a></li>
+                        <li><a href="#" class="nav-link" data-page="9" data-country="angola">🇦🇴 Angola</a></li>
+                        <li><a href="#" class="nav-link" data-page="11" data-country="senegal">🇸🇳 Senegal</a></li>
+                        <li><a href="#" class="nav-link" data-page="13" data-country="uk">🇬🇧 Reino Unido</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-viewer">
@@ -124,6 +146,17 @@
 
         document.getElementById('prevBtn').addEventListener('click', () => goToPage(currentPage - 1));
         document.getElementById('nextBtn').addEventListener('click', () => goToPage(currentPage + 1));
+
+        // Navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = parseInt(link.dataset.page);
+                goToPage(page);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
 
         // Zoom controls
         document.getElementById('zoomIn').addEventListener('click', () => {
