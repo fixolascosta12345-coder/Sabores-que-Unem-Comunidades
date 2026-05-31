@@ -23,51 +23,30 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Book Container -->
-            <div class="book-container">
-                <div class="book">
-                    <!-- Left Page -->
-                    <div class="page page-left">
-                        <img id="pageImageLeft" src="assets/pages/page-01.png" alt="Página esquerda" class="page-image">
-                    </div>
-                    
-                    <!-- Right Page -->
-                    <div class="page page-right">
-                        <img id="pageImageRight" src="assets/pages/page-02.png" alt="Página direita" class="page-image">
-                    </div>
+            <!-- Pages Container (Scrollable) -->
+            <div class="pages-container">
+                <div class="pages-wrapper">
+                    <img id="page1" src="assets/pages/page-03.png" alt="Página 3" class="page-item">
+                    <img id="page2" src="assets/pages/page-04.png" alt="Página 4" class="page-item">
+                    <img id="page3" src="assets/pages/page-05.png" alt="Página 5" class="page-item">
+                    <img id="page4" src="assets/pages/page-06.png" alt="Página 6" class="page-item">
+                    <img id="page5" src="assets/pages/page-07.png" alt="Página 7" class="page-item">
+                    <img id="page6" src="assets/pages/page-08.png" alt="Página 8" class="page-item">
+                    <img id="page7" src="assets/pages/page-09.png" alt="Página 9" class="page-item">
+                    <img id="page8" src="assets/pages/page-10.png" alt="Página 10" class="page-item">
+                    <img id="page9" src="assets/pages/page-11.png" alt="Página 11" class="page-item">
+                    <img id="page10" src="assets/pages/page-12.png" alt="Página 12" class="page-item">
+                    <img id="page11" src="assets/pages/page-13.png" alt="Página 13" class="page-item">
+                    <img id="page12" src="assets/pages/page-14.png" alt="Página 14" class="page-item">
+                    <img id="page13" src="assets/pages/page-15.png" alt="Página 15" class="page-item">
                 </div>
             </div>
-
-            <!-- Navigation Menu (After Book) -->
-            <nav class="bottom-menu">
-                <div class="menu-header">
-                    <h3 data-i18n="menu">Menu</h3>
-                </div>
-                <ul class="menu-list">
-                    <li><a href="#" class="menu-link active" data-page="1" data-i18n="cover">Capa</a></li>
-                    <li><a href="#" class="menu-link" data-page="3" data-i18n="index">Índice</a></li>
-                    <li class="menu-section">
-                        <span class="section-title" data-i18n="recipes">Receitas</span>
-                        <ul class="sub-menu">
-                            <li><a href="#" class="menu-link" data-page="3">🇵🇹 Portugal</a></li>
-                            <li><a href="#" class="menu-link" data-page="5">🇸🇹 São Tomé e Príncipe</a></li>
-                            <li><a href="#" class="menu-link" data-page="7">🇨🇻 Cabo Verde</a></li>
-                            <li><a href="#" class="menu-link" data-page="9">🇦🇴 Angola</a></li>
-                            <li><a href="#" class="menu-link" data-page="11">🇸🇳 Senegal</a></li>
-                            <li><a href="#" class="menu-link" data-page="13">🇬🇧 Reino Unido</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="menu-footer">
-                    <p>Projeto - PADDE 2025/2026</p>
-                </div>
-            </nav>
 
             <!-- Controls -->
             <div class="controls">
                 <button id="prevBtn" class="btn btn-nav" data-i18n="previous">← Anterior</button>
                 <div class="page-info">
-                    <span id="pageNumber">1</span> - <span id="pageNumber2">2</span> / <span id="totalPages">15</span>
+                    <span id="pageNumber">3</span> / <span id="totalPages">15</span>
                 </div>
                 <button id="nextBtn" class="btn btn-nav" data-i18n="next">Próximo →</button>
             </div>
@@ -86,10 +65,6 @@
     <script>
         const translations = {
             pt: {
-                menu: 'Menu',
-                cover: 'Capa',
-                index: 'Índice',
-                recipes: 'Receitas',
                 previous: '← Anterior',
                 next: 'Próximo →',
                 zoomOut: '−',
@@ -97,10 +72,6 @@
                 fit: 'Ajustar'
             },
             en: {
-                menu: 'Menu',
-                cover: 'Cover',
-                index: 'Table of Contents',
-                recipes: 'Recipes',
                 previous: '← Previous',
                 next: 'Next →',
                 zoomOut: '−',
@@ -108,10 +79,6 @@
                 fit: 'Fit'
             },
             fr: {
-                menu: 'Menu',
-                cover: 'Couverture',
-                index: 'Table des Matières',
-                recipes: 'Recettes',
                 previous: '← Précédent',
                 next: 'Suivant →',
                 zoomOut: '−',
@@ -121,7 +88,7 @@
         };
 
         let currentLanguage = 'pt';
-        let currentPage = 1;
+        let currentPage = 3;
         let totalPages = 15;
         let zoomLevel = 100;
 
@@ -144,60 +111,33 @@
 
         // Page navigation
         function goToPage(pageNum) {
-            if (pageNum >= 1 && pageNum <= totalPages) {
+            if (pageNum >= 3 && pageNum <= totalPages) {
                 currentPage = pageNum;
+                const container = document.querySelector('.pages-container');
+                const pageIndex = pageNum - 3;
+                const scrollPosition = pageIndex * container.offsetWidth;
                 
-                // Página esquerda
-                const leftPageNum = pageNum;
-                const leftPageFile = `assets/pages/page-${String(leftPageNum).padStart(2, '0')}.png`;
-                document.getElementById('pageImageLeft').src = leftPageFile;
-                document.getElementById('pageNumber').textContent = leftPageNum;
+                container.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
                 
-                // Página direita
-                const rightPageNum = pageNum + 1;
-                if (rightPageNum <= totalPages) {
-                    const rightPageFile = `assets/pages/page-${String(rightPageNum).padStart(2, '0')}.png`;
-                    document.getElementById('pageImageRight').src = rightPageFile;
-                    document.getElementById('pageNumber2').textContent = rightPageNum;
-                } else {
-                    document.getElementById('pageImageRight').src = '';
-                    document.getElementById('pageNumber2').textContent = '';
-                }
-                
+                document.getElementById('pageNumber').textContent = pageNum;
                 updateNavButtons();
-                
-                // Animação de virada
-                const book = document.querySelector('.book');
-                book.style.animation = 'none';
-                setTimeout(() => {
-                    book.style.animation = 'pageFlip 0.6s ease-in-out';
-                }, 10);
             }
         }
 
         function updateNavButtons() {
-            document.getElementById('prevBtn').disabled = currentPage <= 1;
-            document.getElementById('nextBtn').disabled = currentPage >= totalPages - 1;
+            document.getElementById('prevBtn').disabled = currentPage <= 3;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
         }
 
         document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentPage > 1) goToPage(currentPage - 2);
+            if (currentPage > 3) goToPage(currentPage - 1);
         });
 
         document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentPage < totalPages - 1) goToPage(currentPage + 2);
-        });
-
-        // Navigation links
-        document.querySelectorAll('.menu-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                let page = parseInt(link.dataset.page);
-                if (page % 2 === 0) page--; // Garante que começa em página ímpar
-                goToPage(page);
-                document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            });
+            if (currentPage < totalPages) goToPage(currentPage + 1);
         });
 
         // Zoom controls
@@ -221,15 +161,15 @@
         });
 
         function updateZoom() {
-            const book = document.querySelector('.book');
-            book.style.transform = `scale(${zoomLevel / 100})`;
+            const wrapper = document.querySelector('.pages-wrapper');
+            wrapper.style.transform = `scale(${zoomLevel / 100})`;
             document.getElementById('zoomLevel').textContent = zoomLevel + '%';
         }
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' && currentPage > 1) goToPage(currentPage - 2);
-            if (e.key === 'ArrowRight' && currentPage < totalPages - 1) goToPage(currentPage + 2);
+            if (e.key === 'ArrowLeft' && currentPage > 3) goToPage(currentPage - 1);
+            if (e.key === 'ArrowRight' && currentPage < totalPages) goToPage(currentPage + 1);
         });
 
         // Initialize
