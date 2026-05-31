@@ -23,15 +23,26 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="page-viewer">
-                <img id="pageImage" src="assets/pages/page-01.png" alt="Página do e-book" class="page-image">
+            <!-- Book Container -->
+            <div class="book-container">
+                <div class="book">
+                    <!-- Left Page -->
+                    <div class="page page-left">
+                        <img id="pageImageLeft" src="assets/pages/page-01.png" alt="Página esquerda" class="page-image">
+                    </div>
+                    
+                    <!-- Right Page -->
+                    <div class="page page-right">
+                        <img id="pageImageRight" src="assets/pages/page-02.png" alt="Página direita" class="page-image">
+                    </div>
+                </div>
             </div>
 
             <!-- Controls -->
             <div class="controls">
                 <button id="prevBtn" class="btn btn-nav" data-i18n="previous">← Anterior</button>
                 <div class="page-info">
-                    <span id="pageNumber">1</span> / <span id="totalPages">15</span>
+                    <span id="pageNumber">1</span> - <span id="pageNumber2">2</span> / <span id="totalPages">15</span>
                 </div>
                 <button id="nextBtn" class="btn btn-nav" data-i18n="next">Próximo →</button>
             </div>
@@ -52,7 +63,7 @@
             </div>
             <ul class="menu-list">
                 <li><a href="#" class="menu-link active" data-page="1" data-i18n="cover">Capa</a></li>
-                <li><a href="#" class="menu-link" data-page="2" data-i18n="index">Índice</a></li>
+                <li><a href="#" class="menu-link" data-page="3" data-i18n="index">Índice</a></li>
                 <li class="menu-section">
                     <span class="section-title" data-i18n="recipes">Receitas</span>
                     <ul class="sub-menu">
@@ -135,26 +146,54 @@
         function goToPage(pageNum) {
             if (pageNum >= 1 && pageNum <= totalPages) {
                 currentPage = pageNum;
-                const pageFile = `assets/pages/page-${String(pageNum).padStart(2, '0')}.png`;
-                document.getElementById('pageImage').src = pageFile;
-                document.getElementById('pageNumber').textContent = pageNum;
+                
+                // Página esquerda
+                const leftPageNum = pageNum;
+                const leftPageFile = `assets/pages/page-${String(leftPageNum).padStart(2, '0')}.png`;
+                document.getElementById('pageImageLeft').src = leftPageFile;
+                document.getElementById('pageNumber').textContent = leftPageNum;
+                
+                // Página direita
+                const rightPageNum = pageNum + 1;
+                if (rightPageNum <= totalPages) {
+                    const rightPageFile = `assets/pages/page-${String(rightPageNum).padStart(2, '0')}.png`;
+                    document.getElementById('pageImageRight').src = rightPageFile;
+                    document.getElementById('pageNumber2').textContent = rightPageNum;
+                } else {
+                    document.getElementById('pageImageRight').src = '';
+                    document.getElementById('pageNumber2').textContent = '';
+                }
+                
                 updateNavButtons();
+                
+                // Animação de virada
+                const book = document.querySelector('.book');
+                book.style.animation = 'none';
+                setTimeout(() => {
+                    book.style.animation = 'pageFlip 0.6s ease-in-out';
+                }, 10);
             }
         }
 
         function updateNavButtons() {
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            document.getElementById('prevBtn').disabled = currentPage <= 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages - 1;
         }
 
-        document.getElementById('prevBtn').addEventListener('click', () => goToPage(currentPage - 1));
-        document.getElementById('nextBtn').addEventListener('click', () => goToPage(currentPage + 1));
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentPage > 1) goToPage(currentPage - 2);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentPage < totalPages - 1) goToPage(currentPage + 2);
+        });
 
         // Navigation links
         document.querySelectorAll('.menu-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const page = parseInt(link.dataset.page);
+                let page = parseInt(link.dataset.page);
+                if (page % 2 === 0) page--; // Garante que começa em página ímpar
                 goToPage(page);
                 document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
@@ -182,15 +221,15 @@
         });
 
         function updateZoom() {
-            const img = document.getElementById('pageImage');
-            img.style.transform = `scale(${zoomLevel / 100})`;
+            const book = document.querySelector('.book');
+            book.style.transform = `scale(${zoomLevel / 100})`;
             document.getElementById('zoomLevel').textContent = zoomLevel + '%';
         }
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') goToPage(currentPage - 1);
-            if (e.key === 'ArrowRight') goToPage(currentPage + 1);
+            if (e.key === 'ArrowLeft' && currentPage > 1) goToPage(currentPage - 2);
+            if (e.key === 'ArrowRight' && currentPage < totalPages - 1) goToPage(currentPage + 2);
         });
 
         // Initialize
