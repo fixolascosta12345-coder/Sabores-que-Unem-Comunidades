@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabores que Unem Comunidades - E-book Interativo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Sabores que Unem Comunidades</h1>
+                <p class="subtitle">Flavours that Unite Communities • Saveurs qui Unissent les Communautés</p>
+            </div>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="pt">PT</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="fr">FR</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-viewer">
+                <img id="pageImage" src="assets/pages/page-01.png" alt="Página do e-book" class="page-image">
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="prevBtn" class="btn btn-nav" data-i18n="previous">← Anterior</button>
+                <div class="page-info">
+                    <span id="pageNumber">1</span> / <span id="totalPages">15</span>
+                </div>
+                <button id="nextBtn" class="btn btn-nav" data-i18n="next">Próximo →</button>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div class="zoom-controls">
+                <button id="zoomOut" class="btn btn-small" data-i18n="zoomOut">−</button>
+                <span id="zoomLevel">100%</span>
+                <button id="zoomIn" class="btn btn-small" data-i18n="zoomIn">+</button>
+                <button id="fitScreen" class="btn btn-small" data-i18n="fit">Ajustar</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Internationalization -->
+    <script>
+        const translations = {
+            pt: {
+                menu: 'Menu',
+                cover: 'Capa',
+                index: 'Índice',
+                recipes: 'Receitas',
+                previous: '← Anterior',
+                next: 'Próximo →',
+                zoomOut: '−',
+                zoomIn: '+',
+                fit: 'Ajustar'
+            },
+            en: {
+                menu: 'Menu',
+                cover: 'Cover',
+                index: 'Table of Contents',
+                recipes: 'Recipes',
+                previous: '← Previous',
+                next: 'Next →',
+                zoomOut: '−',
+                zoomIn: '+',
+                fit: 'Fit'
+            },
+            fr: {
+                menu: 'Menu',
+                cover: 'Couverture',
+                index: 'Table des Matières',
+                recipes: 'Recettes',
+                previous: '← Précédent',
+                next: 'Suivant →',
+                zoomOut: '−',
+                zoomIn: '+',
+                fit: 'Ajuster'
+            }
+        };
+
+        let currentLanguage = 'pt';
+        let currentPage = 1;
+        let totalPages = 15;
+        let zoomLevel = 100;
+
+        // Language switching
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentLanguage = e.target.dataset.lang;
+                updateTranslations();
+            });
+        });
+
+        function updateTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                el.textContent = translations[currentLanguage][key] || key;
+            });
+        }
+
+        // Page navigation
+        function goToPage(pageNum) {
+            if (pageNum >= 1 && pageNum <= totalPages) {
+                currentPage = pageNum;
+                const pageFile = `assets/pages/page-${String(pageNum).padStart(2, '0')}.png`;
+                document.getElementById('pageImage').src = pageFile;
+                document.getElementById('pageNumber').textContent = pageNum;
+                updateNavButtons();
+            }
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => goToPage(currentPage - 1));
+        document.getElementById('nextBtn').addEventListener('click', () => goToPage(currentPage + 1));
+
+        // Zoom controls
+        document.getElementById('zoomIn').addEventListener('click', () => {
+            if (zoomLevel < 200) {
+                zoomLevel += 10;
+                updateZoom();
+            }
+        });
+
+        document.getElementById('zoomOut').addEventListener('click', () => {
+            if (zoomLevel > 50) {
+                zoomLevel -= 10;
+                updateZoom();
+            }
+        });
+
+        document.getElementById('fitScreen').addEventListener('click', () => {
+            zoomLevel = 100;
+            updateZoom();
+        });
+
+        function updateZoom() {
+            const img = document.getElementById('pageImage');
+            img.style.transform = `scale(${zoomLevel / 100})`;
+            document.getElementById('zoomLevel').textContent = zoomLevel + '%';
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') goToPage(currentPage - 1);
+            if (e.key === 'ArrowRight') goToPage(currentPage + 1);
+        });
+
+        // Initialize
+        updateTranslations();
+        updateNavButtons();
+        document.getElementById('totalPages').textContent = totalPages;
+    </script>
+</body>
+</html>
